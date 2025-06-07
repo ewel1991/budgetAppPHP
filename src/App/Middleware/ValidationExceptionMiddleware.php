@@ -14,6 +14,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
     try {
       $next();
     } catch (ValidationException $e) {
+
       $oldFormData = $_POST;
 
       $excludedFields = ['password', 'confirmPassword'];
@@ -25,8 +26,12 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
       $_SESSION['errors'] = $e->errors;
       $_SESSION['oldFormData'] = $formattedFormData;
 
-      $referer = $_SERVER['HTTP_REFERER'];
-      redirectTo($referer);
+      $referer = $_SERVER['HTTP_REFERER'] ?? null;
+
+      // Fallback jeśli Referer nie ustawiony
+      $redirectPath = $referer ?: $_SERVER['REQUEST_URI'] ?: '/';
+
+      redirectTo($redirectPath);
     }
   }
 }

@@ -18,6 +18,6 @@ class MatchRule implements RuleInterface
 
   public function getMessage(array $data, string $field, array $params): string
   {
-    return "Does nor match {$params[0]} field";
+    return "Nie zgadza się z {$params[0]} wprowadzonym powyżej";
   }
 }
