@@ -1,30 +1,14 @@
-<?php
-echo '<pre>';
-echo "DANE POST:\n";
-print_r($_POST);
-echo "\nSESSIONS:\n";
-print_r($_SESSION);
-echo '</pre>';
-?>
-
 <?php include $this->resolve("partials/_header.php"); ?>
 
 <body>
-
-  <!-- <?php include $this->resolve("partials/_csrf.php"); ?>-->
 
   <?php include $this->resolve("partials/_navbar.php"); ?>
 
   <div class="small-container text-white rounded-3">
 
-    <?php
-    $errors = $_SESSION['errors'] ?? [];
-    $oldFormData = $_SESSION['old'] ?? [];
-    unset($_SESSION['errors'], $_SESSION['old']);
-    ?>
+    <form class="form-wrapper" method="POST" action="/income">
 
-
-    <form class="form-wrapper" method="POST" action="/income" novalidate>
+      <?php include $this->resolve("partials/_csrf.php"); ?>
 
       <!-- Kwota -->
       <div class="form-group row mb-4">

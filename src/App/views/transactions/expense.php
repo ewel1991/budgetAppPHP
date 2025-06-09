@@ -2,37 +2,40 @@
 
 <body>
 
-  <?php include $this->resolve("partials/_csrf.php"); ?>
-
   <?php include $this->resolve("partials/_navbar.php"); ?>
 
   <div class="small-container text-white rounded-3">
     <form class="form-wrapper" method="POST">
 
+      <?php include $this->resolve("partials/_csrf.php"); ?>
+
       <!-- Kwota -->
       <div class="form-group row mb-4">
         <label for="amount" class="form-label input1">Kwota:</label>
-        <input value="<?php echo e($oldFormData['amount'] ?? ''); ?>" type="number" class="form-control rounded-3 py-2" id="amount" name="amount" step="0.01" min="0" placeholder="Wpisz kwotę">
+        <input value="<?php echo e($oldFormData['amount'] ?? ''); ?>"
+          type="number"
+          class="form-control rounded-3 py-2 <?= isset($errors['amount']) ? 'is-invalid' : '' ?>"
+          id="amount"
+          name="amount"
+          step="0.01"
+          min="0"
+          placeholder="Wpisz kwotę"
+          title="<?= isset($errors['amount']) ? e($errors['amount'][0]) : ''; ?>">
 
-        <?php if (array_key_exists('amount', $errors)) : ?>
-          <div class="bg-gray-100 mt-2 p-2 text-red-500">
-            <?php echo e($errors['amount'][0]); ?>
-          </div>
-        <?php endif; ?>
 
       </div>
 
       <!-- Data -->
       <div class="form-group row mb-4">
         <label for="date" class="form-label input1">Data:</label>
-        <input value="<?php echo e($oldFormData['date'] ?? ''); ?>" type="date" class="form-control rounded-3 py-2" id="date" name="date">
+        <input value="<?php echo e($oldFormData['date'] ?? ''); ?>"
+          type="date"
+          class="form-control rounded-3 py-2 <?= isset($errors['date']) ? 'is-invalid' : '' ?>"
+          id="date"
+          name="date"
+          required
+          title="<?= isset($errors['date']) ? e($errors['date'][0]) : ''; ?>">
 
-        <?php if (array_key_exists('date', $errors)) : ?>
-          <div class="bg-gray-100 mt-2 p-2 text-red-500">
-            <?php echo e($errors['date'][0]); ?>
-          </div>
-
-        <?php endif; ?>
 
       </div>
 
