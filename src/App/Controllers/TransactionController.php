@@ -10,7 +10,8 @@ use Framework\{
 
 use App\Services\{
   ValidatorService,
-  TransactionService
+  TransactionService,
+  UserService
 };
 
 
@@ -31,7 +32,12 @@ class TransactionController
   public function createViewIncome()
   {
 
-    echo $this->view->render("transactions/income.php");
+    $userId = $_SESSION['user']['id'];
+    $incomeCategories = $this->transactionService->getUserIncomeCategories($userId);
+
+    echo $this->view->render("transactions/income.php", [
+      'incomeCategories' => $incomeCategories
+    ]);
   }
 
   public function createIncome()
@@ -46,12 +52,22 @@ class TransactionController
 
   public function createViewExpense()
   {
-    echo $this->view->render("transactions/expense.php");
+    $userId = $_SESSION['user']['id'];
+
+    $expenseCategories = $this->transactionService->getUserExpenseCategories($userId);
+    $paymentMethods = $this->transactionService->getUserPaymentMethods($userId);
+
+    echo $this->view->render("transactions/expense.php", [
+      'expenseCategories' => $expenseCategories,
+      'paymentMethods' => $paymentMethods,
+      'oldFormData' => $_SESSION['old'] ?? [],
+      'errors' => $_SESSION['errors'] ?? [],
+    ]);
   }
 
   public function createViewBalance()
   {
-    $userId = $_SESSION['user'];
+    $userId = $_SESSION['user']['id'];
     $dateRange = $_GET['dateRange'] ?? 'current';
 
     switch ($dateRange) {
@@ -94,9 +110,21 @@ class TransactionController
   }
 
 
-  public function createViewSettings()
+  public function createTransactionSettingsView()
   {
-    echo $this->view->render("transactions/settings.php");
+
+    $userId = $_SESSION['user']['id'];
+    $incomeCategories = $this->transactionService->getUserIncomeCategories($userId);
+    $expenseCategories = $this->transactionService->getUserExpenseCategories($userId);
+    $paymentMethods = $this->transactionService->getUserPaymentMethods($userId);
+
+
+
+    echo $this->view->render("transactions/settings_transactions.php", [
+      'incomeCategories' => $incomeCategories,
+      'expenseCategories' => $expenseCategories,
+      'paymentMethods' => $paymentMethods
+    ]);
   }
 
 
@@ -107,5 +135,82 @@ class TransactionController
     $this->validatorService->validateTransaction($_POST);
     $this->transactionService->createExpense($_POST);
     redirectTo('/balance');
+  }
+
+  public function addIncomeCategory()
+  {
+    $userId = $_SESSION['user']['id'];
+    $categoryName = trim($_POST['income_category'] ?? '');
+
+    if ($categoryName === '') {
+
+      redirectTo('/income');
+    }
+
+    $this->transactionService->addIncomeCategory($userId, $categoryName);
+    redirectTo('/income');
+  }
+
+
+  public function deleteIncomeCategory(): void
+  {
+    $userId = $_SESSION['user']['id'];
+    $formData = $_POST;
+
+    if (isset($formData['category'])) {
+      $this->transactionService->deleteIncomeCategory($userId, $formData['category']);
+    }
+
+    redirectTo('/income');
+  }
+
+  public function addExpenseCategory()
+  {
+    $userId = $_SESSION['user']['id'];
+    $categoryName = trim($_POST['expense_category'] ?? '');
+
+    if ($categoryName === '') {
+      redirectTo('/expense');
+    }
+
+    $this->transactionService->addExpenseCategory($userId, $categoryName);
+    redirectTo('/expense');
+  }
+
+  public function deleteExpenseCategory()
+  {
+    $userId = $_SESSION['user']['id'];
+    $formData = $_POST;
+
+    if (!empty($formData['category'])) {
+      $this->transactionService->deleteExpenseCategory($userId, $formData['category']);
+    }
+
+    redirectTo('/expense');
+  }
+
+  public function addPaymentMethod()
+  {
+    $userId = $_SESSION['user']['id'];
+    $methodName = trim($_POST['payment_method'] ?? '');
+
+    if ($methodName === '') {
+      redirectTo('/expense');
+    }
+
+    $this->transactionService->addPaymentMethod($userId, $methodName);
+    redirectTo('/expense');
+  }
+
+  public function deletePaymentMethod()
+  {
+    $userId = $_SESSION['user']['id'];
+    $methodId = $_POST['payment_method_id'] ?? '';
+
+    if ($methodId !== '') {
+      $this->transactionService->deletePaymentMethod($userId, (int)$methodId);
+    }
+
+    redirectTo('/expense');
   }
 }

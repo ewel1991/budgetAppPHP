@@ -19,7 +19,7 @@ class Database
     string $password
   ) {
 
-    $config = http_build_query(data: $config, arg_separator: ';');
+    $config = http_build_query($config, '', ';');
 
     $dsn = "{$driver}:{$config}";
 

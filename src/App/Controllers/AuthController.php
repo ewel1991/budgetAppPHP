@@ -67,4 +67,68 @@ class AuthController
 
     redirectTo('/');
   }
+
+  public function updateName()
+  {
+    $newName = trim($_POST['name']);
+    $userId = $_SESSION['user']['id'];
+
+    if (empty($newName)) {
+
+      redirectTo('/settings');
+    }
+
+    $this->userService->updateName($userId, $newName);
+
+    // Zaktualizuj sesję
+    $_SESSION['user']['username'] = $newName;
+
+    redirectTo('/settings');
+  }
+
+
+  public function createUserSettingsView()
+  {
+
+    $userId = $_SESSION['user']['id'];
+    $user = $this->userService->getUserById($userId);
+    echo $this->view->render("transactions/settings_user.php", [
+      'currentUser' => $user
+    ]);
+  }
+
+  public function updateEmail()
+  {
+    $newEmail = trim($_POST['email']);
+    $userId = $_SESSION['user']['id'];
+
+    if (empty($newEmail)) {
+      redirectTo('/settings');
+    }
+
+
+    $this->userService->isEmailTaken($newEmail);
+
+
+    $this->userService->updateEmail($userId, $newEmail);
+    $_SESSION['user']['email'] = $newEmail;
+
+    redirectTo('/settings');
+  }
+
+  public function updatePassword()
+  {
+    $password = $_POST['password'] ?? '';
+    $passwordConfirm = $_POST['password_confirm'] ?? '';
+
+    if (empty($password) || $password !== $passwordConfirm) {
+
+      redirectTo('/settings');
+    }
+
+    $userId = $_SESSION['user']['id'];
+    $this->userService->updatePassword($userId, $password);
+
+    redirectTo('/settings');
+  }
 }

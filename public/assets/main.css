@@ -74,6 +74,7 @@ input::placeholder {
 }
 
 
+
 .btn-brownish {
   background-color: #6f4f28;
   color: white;
@@ -213,6 +214,8 @@ input::placeholder {
   margin: 2% auto;
 }
 
+
+
 .centered-container p {
   font-size: 1.5rem;
   line-height: 1.6;
@@ -253,6 +256,17 @@ input[type="date"] {
   margin-bottom: 10px;
 }
 
+.text-brown {
+  color: #A0522D !important;
+}
+
+#incomeExpenseChart {
+  display: block;
+  margin: 0 auto;
+  max-width: 400px;
+  max-height: 400px;
+  background-color: transparent; 
+}
 
 /* Formularz responsywny */
 @media (max-width: 576px) {

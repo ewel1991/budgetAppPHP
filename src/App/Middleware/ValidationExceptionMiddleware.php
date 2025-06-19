@@ -28,7 +28,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
 
       $referer = $_SERVER['HTTP_REFERER'] ?? null;
 
-      // Fallback jeśli Referer nie ustawiony
+
       $redirectPath = $referer ?: $_SERVER['REQUEST_URI'] ?: '/';
 
       redirectTo($redirectPath);

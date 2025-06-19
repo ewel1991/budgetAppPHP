@@ -44,12 +44,19 @@
       <!-- Kategoria -->
       <div class="form-group row mb-4">
         <label for="category" class="form-label input1">Kategoria:</label>
-        <select class="form-select rounded-3 py-2" id="category" name="category">
-          <option value="wynagrodzenie">Wynagrodzenie</option>
-          <option value="odsetki bankowe">Odsetki bankowe</option>
-          <option value="sprzedaż na allegro">Sprzedaż na Allegro</option>
-          <option value="inne">Inne</option>
+
+
+        <select name="category" id="category" class="form-control">
+          <?php foreach ($incomeCategories as $category): ?>
+            <option value="<?= htmlspecialchars($category['name']) ?>">
+              <?= htmlspecialchars($category['name']) ?>
+            </option>
+          <?php endforeach; ?>
         </select>
+
+
+
+
       </div>
 
       <!-- Komentarz -->

@@ -83,7 +83,24 @@
           ? 'Uważaj, wpadasz w długi!'
           : 'Twój bilans wynosi 0 zł.') ?>
     </p>
+
+    <div class="mt-2 text-center">
+      <h4 class="mt-5">Procentowy udział przychodów i wydatków</h4>
+
+      <!-- Kontener z danymi do wykresu -->
+      <div
+        id="chartData"
+        data-total-income="<?= htmlspecialchars(array_sum(array_column($incomes, 'total'))) ?>"
+        data-total-expense="<?= htmlspecialchars(array_sum(array_column($expenses, 'total'))) ?>"></div>
+
+      <canvas id="incomeExpenseChart" width="300" height="300" style="display: block; margin: 0 auto;"></canvas>
+    </div>
+
   </div>
 
-  <?php include $this->resolve("partials/_footer.php"); ?>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/assets/balanceChart.js"></script>
+
 </body>
+
+</html>

@@ -10,7 +10,7 @@ class AuthRequiredMiddleware implements MiddlewareInterface
 {
   public function process(callable $next)
   {
-    error_log("AuthRequiredMiddleware: user=" . ($_SESSION['user'] ?? 'null'));
+    error_log("AuthRequiredMiddleware: user=" . (isset($_SESSION['user']) ? json_encode($_SESSION['user']) : 'null'));
 
     if (empty($_SESSION['user'])) {
       error_log("AuthRequiredMiddleware: redirecting to /login");

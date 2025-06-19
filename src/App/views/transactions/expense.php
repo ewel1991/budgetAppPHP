@@ -43,9 +43,11 @@
       <div class="form-group row mb-4">
         <label for="category" class="form-label input1">Sposób płatności:</label>
         <select class="form-select rounded-3 py-2" id="payment" name="payment">
-          <option value="gotówka">Gotówka</option>
-          <option value="karta debetowa">Karta debetowa</option>
-          <option value="karta kredytowa">Karta kredytowa</option>
+          <?php foreach ($paymentMethods as $method): ?>
+            <option value="<?= e($method['name']) ?>" <?= (isset($oldFormData['payment']) && $oldFormData['payment'] === $method['name']) ? 'selected' : '' ?>>
+              <?= e($method['name']) ?>
+            </option>
+          <?php endforeach; ?>
         </select>
       </div>
 
@@ -54,23 +56,11 @@
       <div class="form-group row mb-4">
         <label for="category" class="form-label input1">Kategoria:</label>
         <select class="form-select rounded-3 py-2" id="category" name="category">
-          <option value="jedzenie">Jedzenie</option>
-          <option value="mieszkanie">Mieszkanie</option>
-          <option value="transport">Transport</option>
-          <option value="telekomunikacja">Telekomunikacja</option>
-          <option value="opieka zdrowotna">Opieka zdrowotna</option>
-          <option value="ubranie">Ubranie</option>
-          <option value="higiena">Higiena</option>
-          <option value="dzieci">Dzieci</option>
-          <option value="rozrywka">Rozrywka</option>
-          <option value="wycieczka">Wycieczka</option>
-          <option value="szkolenia">Szkolenia</option>
-          <option value="książki">Książki</option>
-          <option value="oszczędności">Oszczędności</option>
-          <option value="emerytura">Emerytura</option>
-          <option value="spłata długów">Spłata długów</option>
-          <option value="darowizna">Darowizna</option>
-          <option value="inne wydatki">Inne wydatki</option>
+          <?php foreach ($expenseCategories as $category): ?>
+            <option value="<?= e($category['name']) ?>" <?= (isset($oldFormData['category']) && $oldFormData['category'] === $category['name']) ? 'selected' : '' ?>>
+              <?= e($category['name']) ?>
+            </option>
+          <?php endforeach; ?>
         </select>
       </div>
 
