@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS expense_category_assigned_to_users(
 id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 user_id bigint(20) unsigned NOT NULL,
 name varchar(255) NOT NULL,
+category_limit DECIMAL(10,2) NULL,
 PRIMARY KEY (id),
 FOREIGN KEY(user_id) REFERENCES users(id)
 );
@@ -114,3 +115,6 @@ INSERT INTO payment_methods_default (name) VALUES
 ('gotówka'),
 ('karta debetowa'),
 ('karta kredytowa');
+
+ALTER TABLE expense_category_assigned_to_users
+ADD COLUMN IF NOT EXISTS category_limit DECIMAL(10,2) NULL AFTER name;
