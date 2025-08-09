@@ -194,7 +194,7 @@ class TransactionService
   public function getUserExpenseCategories(int $userId): array
   {
     return $this->db->query(
-      "SELECT name FROM expense_category_assigned_to_users
+      "SELECT name, category_limit FROM expense_category_assigned_to_users
          WHERE user_id = :user_id",
       ['user_id' => $userId]
     )->findAll();
@@ -222,6 +222,20 @@ class TransactionService
     $this->db->query(
       "DELETE FROM payment_methods_assigned_to_users WHERE user_id = :user_id AND id = :id",
       ['user_id' => $userId, 'id' => $id]
+    );
+  }
+
+  public function setExpenseCategoryLimit(int $userId, string $categoryName, float $limit): void
+  {
+    $this->db->query(
+      "UPDATE expense_category_assigned_to_users
+          SET category_limit = :limit
+          WHERE user_id = :user_id AND name = :name",
+      [
+        'user_id' => $userId,
+        'name' => $categoryName,
+        'limit' => $limit
+      ]
     );
   }
 }

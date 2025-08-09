@@ -92,6 +92,39 @@
 
     <hr class="my-2">
 
+    <!-- Ustaw limit dla kategorii wydatku -->
+    <form method="POST" action="/expense-categories/set-limit">
+      <?php include $this->resolve("partials/_csrf.php"); ?>
+
+      <label for="expense_category_limit" class="form-label">Ustaw limit dla kategorii wydatku:</label>
+
+      <div class="d-flex gap-2 align-items-center mb-3" style="max-width: 400px;">
+        <select name="category" id="expense_category_limit" class="form-select" required>
+          <option value="" disabled selected>-- Wybierz kategorię --</option>
+          <?php foreach ($expenseCategories as $category): ?>
+            <option value="<?= htmlspecialchars($category['name']) ?>">
+              <?= htmlspecialchars($category['name']) ?> (Limit: <?= $category['category_limit'] !== null ? number_format($category['category_limit'], 2) : 'brak' ?>)
+            </option>
+          <?php endforeach; ?>
+        </select>
+
+        <input
+          type="number"
+          step="0.01"
+          min="0"
+          class="form-control"
+          name="limit"
+          placeholder="Limit w PLN"
+          required
+          style="max-width: 150px;">
+
+        <button type="submit" class="btn btn-brownish px-4">Ustaw limit</button>
+      </div>
+    </form>
+
+    <hr class="my-2">
+
+
     <!-- Dodaj sposób płatności -->
     <form method="POST" action="/payment-categories/add">
       <?php include $this->resolve("partials/_csrf.php"); ?>

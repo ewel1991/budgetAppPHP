@@ -117,4 +117,4 @@ INSERT INTO payment_methods_default (name) VALUES
 ('karta kredytowa');
 
 ALTER TABLE expense_category_assigned_to_users
-ADD COLUMN IF NOT EXISTS category_limit DECIMAL(10,2) NULL AFTER name;
+ADD COLUMN category_limit DECIMAL(10,2) NULL AFTER name;

@@ -213,4 +213,19 @@ class TransactionController
 
     redirectTo('/expense');
   }
+
+
+  public function setExpenseCategoryLimit()
+  {
+    $userId = $_SESSION['user']['id'];
+    $categoryName = trim($_POST['category'] ?? '');
+    $limit = isset($_POST['limit']) ? (float)$_POST['limit'] : null;
+
+    if ($categoryName === '' || $limit === null || $limit < 0) {
+      redirectTo('/settings/transactions');
+    }
+
+    $this->transactionService->setExpenseCategoryLimit($userId, $categoryName, $limit);
+    redirectTo('/settings/transactions');
+  }
 }
