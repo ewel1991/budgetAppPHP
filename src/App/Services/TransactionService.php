@@ -238,4 +238,72 @@ class TransactionService
       ]
     );
   }
+
+
+  public function getExpenseCategoryLimit(int $userId, string $categoryName): ?float
+  {
+    $result = $this->db->query(
+      "SELECT category_limit
+         FROM expense_category_assigned_to_users
+         WHERE user_id = :user_id
+           AND name = :category_name
+         LIMIT 1",
+      [
+        'user_id' => $userId,
+        'category_name' => $categoryName
+      ]
+    )->find();
+
+    return $result ? (float)$result['category_limit'] : null;
+  }
+
+  public function getCategoryLimitStatus(int $userId, string $categoryName, ?string $startDate = null, ?string $endDate = null): array
+  {
+    $categoryLimit = $this->getExpenseCategoryLimit($userId, $categoryName);
+
+    if ($categoryLimit === null) {
+      return [
+        'limitSet' => false,
+        'limit' => null,
+        'spent' => 0,
+        'remaining' => null
+      ];
+    }
+
+    if ($startDate === null || $endDate === null) {
+      $startDate = date('Y-m-01');
+      $endDate = date('Y-m-t');
+    }
+
+    $spentRow = $this->db->query(
+      "SELECT SUM(amount) AS total_spent
+         FROM expenses
+         WHERE user_id = :user_id
+           AND expense_category_assigned_to_user_id = (
+               SELECT id
+               FROM expense_category_assigned_to_users
+               WHERE user_id = :user_id
+                 AND name = :category_name
+               LIMIT 1
+           )
+           AND date_of_expense BETWEEN :start_date AND :end_date",
+      [
+        'user_id' => $userId,
+        'category_name' => $categoryName,
+        'start_date' => $startDate,
+        'end_date' => $endDate
+      ]
+    )->find();
+
+    $spent = $spentRow && $spentRow['total_spent'] !== null
+      ? (float)$spentRow['total_spent']
+      : 0.0;
+
+    return [
+      'limitSet' => true,
+      'limit' => $categoryLimit,
+      'spent' => $spent,
+      'remaining' => $categoryLimit - $spent
+    ];
+  }
 }

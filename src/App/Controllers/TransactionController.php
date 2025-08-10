@@ -228,4 +228,30 @@ class TransactionController
     $this->transactionService->setExpenseCategoryLimit($userId, $categoryName, $limit);
     redirectTo('/settings/transactions');
   }
+
+  public function getExpenseCategoryLimitAjax(): void
+  {
+    $userId = $_SESSION['user']['id'];
+    $categoryName = $_GET['category'] ?? '';
+    $date = $_GET['date'] ?? null;
+
+    if ($categoryName === '') {
+      http_response_code(400);
+      echo json_encode(['error' => 'Category parameter is required']);
+      return;
+    }
+
+    if ($date !== null) {
+      $startDate = date('Y-m-01', strtotime($date));
+      $endDate = date('Y-m-t', strtotime($date));
+    } else {
+      $startDate = null;
+      $endDate = null;
+    }
+
+    $limitStatus = $this->transactionService->getCategoryLimitStatus($userId, $categoryName, $startDate, $endDate);
+
+    header('Content-Type: application/json');
+    echo json_encode($limitStatus);
+  }
 }

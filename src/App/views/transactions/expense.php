@@ -64,6 +64,9 @@
         </select>
       </div>
 
+      <!-- Tutaj wyświetlimy info o limicie kategorii -->
+      <div id="category-limit-info" class="mb-4" style="font-weight: bold;"></div>
+
       <!-- Komentarz -->
       <div class="form-group row mb-4">
         <label for="comment" class="form-label input1">Komentarz:</label>
@@ -77,9 +80,13 @@
       </div>
 
     </form>
-  </div>
 
   </div>
 
 
-  <?php include $this->resolve("partials/_footer.php"); ?>
+  <script src="/assets/expense-limit.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

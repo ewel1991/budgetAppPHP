@@ -47,4 +47,7 @@ function registerRoutes(App $app)
 
   $app->post('/settings/update-email', [AuthController::class, 'updateEmail'])->add(AuthRequiredMiddleware::class);
   $app->post('/settings/update-password', [AuthController::class, 'updatePassword'])->add(AuthRequiredMiddleware::class);
+
+  $app->get('/expense-categories/limit', [TransactionController::class, 'getExpenseCategoryLimitAjax'])
+    ->add(AuthRequiredMiddleware::class);
 }
