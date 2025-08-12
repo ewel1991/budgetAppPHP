@@ -266,7 +266,7 @@ class TransactionService
   ): array {
     $categoryLimit = $this->getExpenseCategoryLimit($userId, $categoryName);
 
-    if ($categoryLimit === null) {
+    if ($categoryLimit === null || $categoryLimit == 0) {
       return [
         'limitSet' => false,
         'limit' => null,

@@ -103,7 +103,10 @@
           <option value="" disabled selected>-- Wybierz kategorię --</option>
           <?php foreach ($expenseCategories as $category): ?>
             <option value="<?= htmlspecialchars($category['name']) ?>">
-              <?= htmlspecialchars($category['name']) ?> (Limit: <?= $category['category_limit'] !== null ? number_format($category['category_limit'], 2) : 'brak' ?>)
+              <?= htmlspecialchars($category['name']) ?>
+              (Limit: <?= ($category['category_limit'] === null || $category['category_limit'] == 0)
+                        ? 'brak limitu'
+                        : number_format($category['category_limit'], 2) ?>)
             </option>
           <?php endforeach; ?>
         </select>
