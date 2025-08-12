@@ -1,16 +1,17 @@
-async function fetchCategoryLimit(category) {
+async function fetchCategoryLimit(category, dateValue, amountValue) {
   if (!category) {
     document.getElementById('category-limit-info').textContent = '';
     return;
   }
 
-  // pobierz datę z inputa
-  const dateInput = document.getElementById('date');
-  const dateValue = dateInput ? dateInput.value : null;
-
   let url = '/expense-categories/limit?category=' + encodeURIComponent(category);
+
   if (dateValue) {
     url += '&date=' + encodeURIComponent(dateValue);
+  }
+
+  if (amountValue !== undefined) {
+    url += '&amount=' + encodeURIComponent(amountValue);
   }
 
   try {
@@ -34,12 +35,14 @@ async function fetchCategoryLimit(category) {
   }
 }
 
-
-document.getElementById('category').addEventListener('change', (e) => {
-  fetchCategoryLimit(e.target.value);
-});
-
-document.getElementById('date').addEventListener('change', (e) => {
+function updateLimitInfo() {
   const category = document.getElementById('category').value;
-  fetchCategoryLimit(category);
-});
+  const dateValue = document.getElementById('date').value;
+  const amountValue = document.getElementById('amount').value;
+
+  fetchCategoryLimit(category, dateValue, amountValue);
+}
+
+document.getElementById('category').addEventListener('change', updateLimitInfo);
+document.getElementById('date').addEventListener('change', updateLimitInfo);
+document.getElementById('amount').addEventListener('input', updateLimitInfo);

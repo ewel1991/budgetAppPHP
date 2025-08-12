@@ -234,6 +234,7 @@ class TransactionController
     $userId = $_SESSION['user']['id'];
     $categoryName = $_GET['category'] ?? '';
     $date = $_GET['date'] ?? null;
+    $amount = isset($_GET['amount']) ? (float)$_GET['amount'] : 0.0;
 
     if ($categoryName === '') {
       http_response_code(400);
@@ -249,7 +250,8 @@ class TransactionController
       $endDate = null;
     }
 
-    $limitStatus = $this->transactionService->getCategoryLimitStatus($userId, $categoryName, $startDate, $endDate);
+
+    $limitStatus = $this->transactionService->getCategoryLimitStatus($userId, $categoryName, $startDate, $endDate, $amount);
 
     header('Content-Type: application/json');
     echo json_encode($limitStatus);

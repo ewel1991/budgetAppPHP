@@ -257,8 +257,13 @@ class TransactionService
     return $result ? (float)$result['category_limit'] : null;
   }
 
-  public function getCategoryLimitStatus(int $userId, string $categoryName, ?string $startDate = null, ?string $endDate = null): array
-  {
+  public function getCategoryLimitStatus(
+    int $userId,
+    string $categoryName,
+    ?string $startDate = null,
+    ?string $endDate = null,
+    float $amount = 0.0  // nowy parametr, domyślnie 0
+  ): array {
     $categoryLimit = $this->getExpenseCategoryLimit($userId, $categoryName);
 
     if ($categoryLimit === null) {
@@ -299,11 +304,14 @@ class TransactionService
       ? (float)$spentRow['total_spent']
       : 0.0;
 
+    // Dodajemy wpisaną kwotę do wydatków
+    $spentWithAmount = $spent + $amount;
+
     return [
       'limitSet' => true,
       'limit' => $categoryLimit,
-      'spent' => $spent,
-      'remaining' => $categoryLimit - $spent
+      'spent' => $spentWithAmount,
+      'remaining' => $categoryLimit - $spentWithAmount
     ];
   }
 }
