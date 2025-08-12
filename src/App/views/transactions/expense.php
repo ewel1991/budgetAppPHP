@@ -28,7 +28,7 @@
       <!-- Data -->
       <div class="form-group row mb-4">
         <label for="date" class="form-label input1">Data:</label>
-        <input value="<?php echo e($oldFormData['date'] ?? ''); ?>"
+        <input value="<?php echo e($oldFormData['date'] ?? date('Y-m-d')); ?>"
           type="date"
           class="form-control rounded-3 py-2 <?= isset($errors['date']) ? 'is-invalid' : '' ?>"
           id="date"
