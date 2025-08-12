@@ -44,6 +44,10 @@
               <td><?= number_format((float)$income['total'], 2, ',', ' ') ?> zł</td>
             </tr>
           <?php endforeach; ?>
+          <tr class="table-success fw-bold">
+            <td>Suma</td>
+            <td><?= number_format($totalIncome, 2, ',', ' ') ?> zł</td>
+          </tr>
         </tbody>
       </table>
     <?php else: ?>
@@ -66,6 +70,10 @@
               <td><?= number_format((float)$expense['total'], 2, ',', ' ') ?> zł</td>
             </tr>
           <?php endforeach; ?>
+          <tr class="table-danger fw-bold">
+            <td>Suma</td>
+            <td><?= number_format($totalExpense, 2, ',', ' ') ?> zł</td>
+          </tr>
         </tbody>
       </table>
     <?php else: ?>
