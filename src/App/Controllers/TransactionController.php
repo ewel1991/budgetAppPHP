@@ -15,6 +15,8 @@ use App\Services\{
 };
 
 
+use Gemini;
+
 class TransactionController
 {
   public function __construct(
@@ -97,6 +99,14 @@ class TransactionController
     $totalExpense = array_sum(array_column($expenses, 'total'));
     $balance = $totalIncome - $totalExpense;
 
+    $advisorMessage = $this->getAdvisorMessage(
+      $totalIncome,
+      $totalExpense,
+      $balance,
+      $incomes,
+      $expenses
+    );
+
     echo $this->view->render("transactions/balance.php", [
       'incomes' => $incomes,
       'expenses' => $expenses,
@@ -105,8 +115,54 @@ class TransactionController
       'balance' => $balance,
       'dateRange' => $dateRange,
       'startDate' => $startDate,
-      'endDate' => $endDate
+      'endDate' => $endDate,
+      'advisorMessage' => $advisorMessage
     ]);
+  }
+
+  private function getAdvisorMessage(
+    float $totalIncome,
+    float $totalExpense,
+    float $balance,
+    array $incomes,
+    array $expenses
+  ): string {
+    try {
+      $client = Gemini::client($_ENV['GEMINI_API_KEY'] ?? 'TWÓJ_KLUCZ_API_TUTAJ');
+
+      $model = $client->generativeModel('gemini-2.5-flash', [
+        'generationConfig' => [
+          'temperature' => 0.7,
+          'maxOutputTokens' => 2048
+        ]
+      ]);
+
+      // Przygotowanie czytelnego opisu kategorii
+      $incomeSummary = implode(", ", array_map(fn($i) => "{$i['category']}: {$i['total']} zł", $incomes));
+      $expenseSummary = implode(", ", array_map(fn($e) => "{$e['category']}: {$e['total']} zł", $expenses));
+
+      $prompt = sprintf(
+        "Jesteś doradcą finansowym. Na podstawie danych użytkownika:
+            Przychody: %.2f zł (%s),
+            Wydatki: %.2f zł (%s),
+            Bilans: %.2f zł.
+            Przeanalizuj strukturę wydatków i przychodów, wskaż mocne i słabe strony oraz zaproponuj jedną praktyczną poradę.
+            Odpowiedź w języku polskim, maksymalnie 3 zdania.",
+        $totalIncome,
+        $incomeSummary,
+        $totalExpense,
+        $expenseSummary,
+        $balance
+      );
+
+      $response = $model->generateContent($prompt);
+
+      return method_exists($response, 'text')
+        ? trim($response->text())
+        : "Brak odpowiedzi od doradcy finansowego.";
+    } catch (\Exception $e) {
+      return "Błąd API Gemini: " . $e->getMessage();
+    }
   }
 
 

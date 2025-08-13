@@ -92,6 +92,15 @@
           : 'Twój bilans wynosi 0 zł.') ?>
     </p>
 
+    <?php if (!empty($advisorMessage)): ?>
+      <div class="alert alert-info mt-3">
+        💡 <strong>Porada doradcy finansowego:</strong><br>
+        <?= htmlspecialchars($advisorMessage) ?>
+      </div>
+    <?php endif; ?>
+
+
+
     <div class="mt-2 text-center">
       <h4 class="mt-5">Procentowy udział przychodów i wydatków</h4>
 

@@ -262,7 +262,7 @@ class TransactionService
     string $categoryName,
     ?string $startDate = null,
     ?string $endDate = null,
-    float $amount = 0.0  // nowy parametr, domyślnie 0
+    float $amount = 0.0
   ): array {
     $categoryLimit = $this->getExpenseCategoryLimit($userId, $categoryName);
 
